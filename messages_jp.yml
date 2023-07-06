@@ -1,0 +1,496 @@
+#
+# メッセージ構成
+#
+#
+# ほとんどの場合、デフォルトのメッセージ内の変数は利用可能なものです
+# その特定のメッセージ内。 関連するメッセージは例外です。
+#ある罰に。
+#
+# メッセージに関連する罰がある場合、複数の変数を使用できます。
+#
+# %ID% - 罰ID番号
+# %TYPE% - 罰のタイプ、例: '禁止'
+# %TYPE_VERB% - 動詞としての罰の種類。 '禁止された'
+# %VICTIM% - 罰の被害者の表示名
+# %VICTIM_ID% - 被害者の内部識別子
+# %OPERATOR% - 罰を与えたスタッフの表示名
+# %OPERATOR_ID% - オペレーターの内部識別子
+# %UNOPERATOR% - スタッフメンバーが罰を取り消します。 罰が解除された場合のみ利用可能
+# %UNOPERATOR_ID% - 処罰を取り消すスタッフメンバーの内部識別子
+# %REASON% - 処罰の理由
+# %SCOPE% - 処罰の範囲
+# %DURATION% - 元の期間（罰が与えられた期間）
+# %START_DATE% - 罰が作成された日付
+# %TIME_PASSED% - 罰が作成されてからの時間
+# %TIME_PASSED_SIMPLE% - 罰則が作成されてからの時間。可能な最大の時間単位に四捨五入されます（例: 1 か月 23 日ではなく 2 か月）
+# %END_DATE% - 罰が終了する日付、または永続的な罰の場合は formatting.permanent-display.absolute
+# %TIME_REMAINING_SIMPLE% - 可能な最大の時間単位に四捨五入された刑罰が終了するまでの時間 (例: 9 日 13 時間ではなく 10 日)
+# %HAS_EXPIRED% - 罰の期間が経過したかどうかを示します。 懲罰が取り消されるかどうかはチェックしない！
+#
+# 次の変数は利用可能性が制限されています。
+# %TARGET% - コマンドの元のターゲット引数。 たとえば、「/ipban Player1」では、%TARGET% は Player1 です。
+# %NEXTPAGE% - 履歴などのリストの次のページの番号
+# %PREVIOUSPAGE% - 履歴などのリストの前のページの番号
+#
+#
+# /banlist、/mutelist、/history、/warns、/blame に使用されます
+lists:
+  mute-list:
+    perPage: 10
+    noPages: '&7アクティブなMuteはありません。'
+    maxPages: '&e%PAGE%&7 &7ページは存在しません。'
+    permission:
+      command: '&7MuteListは表示できない場合があります。'
+
+    layout:
+      header:
+        - '&c処罰者 &8| &e解除まで &8| &7オペレーター'
+        - '&7理由'
+        - '&7'
+      body:
+        - '&7[&e%ID%&7] '
+        - '&c&o%VICTIM%&8 | &e%TIME_REMAINING%&8| &7%OPERATOR%'
+        - '&7%REASON%'
+        - '&7'
+      footer: '&7最大ページ数は&e%PAGE%&7ページです。&7&o/mutelist %NEXTPAGE% &7を実行することで、次のページを参照できます。'
+
+    usage: '&c使い方: /mutelist &e[ページ]'
+
+  ban-list:
+    perPage: 10
+    noPages: '&7アクティブなBanはありません。'
+    maxPages: '&e%PAGE%&7 &7ページは存在しません。'
+    permission:
+      command: '&7BanListは表示できない場合があります。'
+
+    layout:
+      header:
+        - '&c処罰者 &8| &e解除まで &8| &7オペレーター'
+        - '&7理由'
+        - '&7'
+      body:
+        - '&7[&e%ID%&7]'
+        - '&c&o%VICTIM%&8 | &e%TIME_REMAINING%&8| &7%OPERATOR%'
+        - '&7%REASON%'
+        - '&7'
+      footer: '&7最大ページ数は&e%PAGE%&7ページです。&7&o/banlist %NEXTPAGE% &7を実行することで、次のページを参照できます。'
+
+    usage: '&c使い方: /banlist &e[ページ]'
+
+  history:
+    perPage: 10
+    noPages: '&c&o%TARGET%&7 には履歴がありませんでした。'
+    maxPages: '&e%PAGE%&7 &7ページは存在しません。'
+    permission:
+      command: '&7履歴を閲覧できない場合があります。'
+
+    layout:
+      header:
+        - '&e&o%TARGET%&7の処罰履歴'
+        - '&c処罰内容 &8| &e執行日 &8| &7オペレーター'
+        - '&7理由'
+        - '&7'
+      body:
+        - '&7[&e%ID%&7]'
+        - '&c%TYPE% &8| &e%START_DATE% &8| &7%OPERATOR%&f'
+        - '&7%REASON%'
+        - '&7'
+      footer: '&7最大ページ数は&e%PAGE%&7ページです。&7&o/history %TARGET% %NEXTPAGE% &7を実行することで、次のページを参照できます。'
+
+    usage: '&c使い方: /history &e<対象プレイヤー> [ページ]'
+
+  warns:
+    perPage: 10
+    noPages: '&c&o%TARGET%&7 には履歴がありませんでした。'
+    maxPages: '&e%PAGE%&7 &7ページは存在しません。'
+    permission:
+      command: '&7履歴を閲覧できない場合があります。'
+
+    layout:
+      header:
+        - '&e&o%TARGET%&7の警告履歴'
+        - '&e期間 &8| &7執行者 &8| &7理由'
+        - '&7'
+      body:
+        - '&7[&e%ID%&7]'
+        - '&e%TIME_REMAINING% &8| &7%OPERATOR% &8| &7%REASON%'
+        - '&7'
+      footer: '&7最大ページ数は&e%PAGE%&7ページです。&7&o/warns %TARGET% %NEXTPAGE% &7を実行することで、次のページを参照できます。'
+
+    usage: '&c使い方: /warns &e<対象プレイヤー> [ページ]'
+
+  blame:
+    perPage: 10
+    noPages: '&c&o%TARGET%&7 はプレイヤーを処罰していません。'
+    maxPages: '&e%PAGE%&7 &7ページは存在しません。'
+    permission:
+      command: '&7履歴を閲覧できない場合があります。'
+
+    layout:
+      header:
+        - '&e&o%TARGET%&7が行った処罰'
+        - '&7[&eID&7]'
+        - '&c処罰者&8 | &7処罰内容 &8| &e執行日'
+        - '&7理由'
+        - '&7'
+      body:
+        - '&7[&e%ID%&7]'
+        - '&c&o%VICTIM% &8| &7%TYPE% &8 | &e%START_DATE%'
+        - '&7%REASON%'
+        - '&7'
+      footer: '&7最大ページ数は&e%PAGE%&7ページです。&7&o/blam %TARGET% %NEXTPAGE% &7を実行することで、次のページを参照できます。'
+
+    usage: '&cUsage: /blame &e<対象プレイヤー> [ページ]'
+
+
+all:
+  prefix:
+     # 有効にすると、すべてのメッセージにプレフィックスが付けられます
+    enable: false
+     # 使用するプレフィックス
+    value: '&6&lLibertyBans &8»&7 '
+
+   # プレイヤーが /libertybans と入力しても「libertybans.commands」権限を持っていない場合、これは拒否メッセージです。
+  base-permission-message: '&cあなたには権限がありません。'
+   # コマンドを発行するときに、指定されたプレーヤーまたは IP が見つからなかった場合、エラー メッセージはどのように表示されるべきですか?
+  not-found:
+    uuid: '&c&o%TARGET%&7 は有効な uuid ではありません。'
+    player: '&c&o%TARGET%&7 はオンラインまたはオフラインで見つかりませんでした。'
+    player-or-address: '&c&o%TARGET%&7 はオンラインでもオフラインでも見つかりませんでした。また、有効な IP アドレスではありません。'
+
+  usage: '&c不明なサブコマンドです。 使用状況の表示:'
+
+ # 特定の書式設定オプション
+formatting:
+    # 永久的な罰を与えるには 2つの方法があります。 1 つ目は、時間を指定しないことです (/ban <player> <reason>)。
+    # 2つ目は、永続的な時間を指定することです (/ban <player> perm <reason>)。
+    # コマンドを入力するとき、どの時点の引数が永続的なものとしてカウントされますか?
+  permanent-arguments:
+    - 'perm'
+    - 'permanent'
+    - 'permanently'
+   # 罰の種類はどのように表示されるべきですか?
+  punishment-type-display:
+    WARN: 'Warn'
+    KICK: 'Kick'
+    MUTE: 'Mute'
+    BAN: 'Ban'
+
+   # /blameを使用する場合、コンソールはどのように指定すればよいですか?
+  console-arguments:
+    - 'CONSOLE'
+   # 「永続的」を期間としてどのように表示する必要がありますか?
+  permanent-display:
+     # 永久懲罰はいつ終わるのですか？
+    absolute: 'Never'
+     # 永続的な期間とは何ですか?
+    duration: '永久的に'
+     # 永久懲罰の残り時間についてどのように説明しますか?
+    relative: '永久'
+
+    # 刑罰の残り時間がなくなったとき（刑罰が終了したとき）、
+    # これは %TIME_REMAINING% 変数の値になります
+  no-time-remaining-display: 'N/A'
+   # %HAS_EXPIRED% 変数はどのように表示されるべきですか?
+  punishment-expired-display:
+     # 期限切れの刑罰をどのように説明しますか?
+    expired: '期限切れ'
+     # 期限切れになっていない刑罰をどのように説明しますか?
+    not-expired: '有効期限内'
+
+   # コンソールはどのように表示すればよいでしょうか?
+  console-display: 'CONSOLE'
+   # 罰の種類は動詞としてどのように表示されるべきですか? %TYPE_VERB% 変数に使用されます。
+  punishment-type-verb-display:
+    WARN: 'Warned'
+    KICK: 'Kicked'
+    MUTE: 'Muted'
+    BAN: 'Banned'
+
+   # グローバルスコープはどのように表示されるべきですか?
+  global-scope-display: 'すべてのサーバー'
+  # 被害者の表示方法を制御します
+  victim-display:
+      # まれに名前不明のユーザーに対してペナルティが与えられる場合があります。 このようなことが起こる可能性があるのは、
+      # ユーザーは UUID によって罰せられますが、一部の設定ではプレイヤー名を検索することができません。
+      # この問題が発生した場合、プレイヤー名の代わりに次のテキストが使用されます。
+    player-name-unknown: '-名前不明-'
+     # libertybans.admin.viewips 権限のないプレイヤーの IP アドレスを検閲するかどうか
+    censor-ip-addresses: false
+     # ユーザーに権限がないためIPアドレスが参照できない場合の代替テキスト
+    censored-ip-address: '<censored IP address>'
+
+
+misc:
+   # 相対的な時間と期間のフォーマットに関する問題
+  time:
+    grammar:
+       # 最後のフラグメントの前に何を置くべきですか? 無効にするには空のテキストに設定します
+      and: ''
+       # 有効にすると、最後のフラグメントを除く各時間フラグメントの後にカンマが配置されます
+      comma: true
+
+    fragments:
+      YEARS: '%VALUE% 年'
+      DAYS: '%VALUE% 日'
+      MINUTES: '%VALUE% 分'
+      HOURS: '%VALUE% 時間'
+      MONTHS: '%VALUE% ヶ月'
+      WEEKS: '%VALUE% 週間'
+
+      # 時間は秒の精度でフォーマットされますが、秒を表示したくない場合もあります
+      # ほとんどの場合。 ただし、継続時間が非常に短い場合は、値を秒単位で表示する必要があります。
+      # 上記のセクションで SECONDS を使用している場合、この値は意味がありません。
+    fallback-seconds: '%VALUE% 秒'
+
+  unknown-error: '&cAn unknown error occurred.'
+   # メイン設定で同期強制戦略が DENY の場合にのみ適用されます
+  sync-chat-denial-message: '&cSynchronous chat denied. &7Please try again.'
+
+ #/unban、/unmute、/unwarn
+removals:
+  mutes:
+    success:
+      message: '&a&o%VICTIM%&7のMuteを解除しました。'
+      notification: '&e&o%UNOPERATOR%&7 &7が &a&o%VICTIM%&7 のMuteを解除しました。'
+
+    not-found: '&e&o%TARGET%&7 はMuteされていません。'
+    usage: '&c使い方: /unmute &e<対象プレイヤー>.'
+    permission:
+      uuid: '&cプレイヤーに対してこれを行うことはできません。'
+      ip-address: '&cIP アドレスに対してこれを行うことはできません。'
+      both: '&cプレイヤーとその IP アドレスに対してこれを行うことはできません。'
+
+
+  warns:
+    not-a-number: '&c&o%ID_ARG%&7 は数値ではありません。'
+    success:
+      message: '&a&o%VICTIM%&7のWarnを解除しました。'
+      notification: '&e&o%UNOPERATOR%&7 &7が &a&o%VICTIM%&7 のWarnを解除しました。'
+
+    not-found: '&c&o%TARGET%&7 には &c&o%ID%&7 による警告がありません。'
+    usage: '&cUsage: /unwarn &e<対象プレイヤー> <id>'
+    permission:
+      uuid: '&cプレイヤーに対してこれを行うことはできません。'
+      ip-address: '&cアドレスに対してこれを行うことはできません。'
+      both: '&cプレイヤーとその IP アドレスに対してこれを行うことはできません。'
+
+
+  bans:
+    success:
+      message: '&a&o%VICTIM%&7のBanを解除しました。'
+      notification: '&e&o%UNOPERATOR%&7 &7が &a&o%VICTIM%&7 のBanを解除しました。'
+
+    not-found: '&c&o%TARGET%&7 はBanされていません。'
+    usage: '&cUsage: /unban &e<対象プレイヤー>'
+    permission:
+      uuid: '&cプレイヤーに対してこれを行うことはできません。'
+      ip-address: '&cアドレスに対してこれを行うことはできません。'
+      both: '&cプレイヤーとその IP アドレスに対してこれを行うことはできません。'
+
+
+
+admin:
+  reloaded: '&aLibertyBansをリロードします。'
+  ellipses: '&aLibertyBansをリロード中...'
+  reload-failed: '&c構成の再ロード中にエラーが発生しました。 サーバーコンソールを確認してください。'
+  restarted: '&aRestarted'
+  no-permission: '&c申し訳ありませんが、これは使用できません。'
+  addons:
+    listing:
+      message: '&b&lインストールされたアドオン'
+      layout: '&7- %ADDON%'
+
+    reload-addon:
+      success: '&aリロードされたアドオン &e%ADDON%&a.'
+      does-not-exist: '&cそのアドオンは存在しません。'
+      failed: '&cアドオン構成の再読み込み中にエラーが発生しました。 サーバーコンソールを確認してください。'
+      usage: '&c使い方: /libertybans addon reload <addon>. &7すべてのアドオンを再ロードするには、/libertybans reload です。'
+
+    usage: '&c使い方: /libertybans addon <list|reload>'
+
+  importing:
+    failure: '&cインポートに失敗しました。 詳細については、サーバー コンソールを参照してください。'
+    started: '&7インポートが始まりました。 詳細と進行状況については、サーバー コンソールを表示してください。'
+    complete: '&7インポートが完了しました。'
+     # 間違いを防ぐため、一度に複数回インポートすることはできません。
+    in-progress: '&cすでにインポートが進行中です。'
+    usage: '&c使い方: /libertybans import <advancedban|litebans|vanilla|self>'
+
+
+ # 
+ # /ban、/mute、/warn、/kick に関するメッセージ
+ # 罰のレイアウトが含まれています
+ # 
+ # 
+additions:
+  mutes:
+    conflicting: '&c&o%TARGET%&7 はすでにMuteされています。'
+    layout:
+      - '&8------------------------------------'
+      - '&c&lあなたはこのサーバーでMuteされています。'
+      - '&7残り時間 &8: &e%TIME_REMAINING%'
+      - ''
+      - '&c理由 &8: &7%REASON%'
+      - '&a異議申し立てはDiscordで &8>> &9https://discord.gg/hmk7eZfGWJ'
+      - '&8------------------------------------'
+    success:
+      message:
+        - '&e%REASON%&a &7のため、&c&o%VICTIM%&7 を &e%DURATION% &7Muteしました。'
+      notification:
+        - '&c&o%VICTIM% &7は &e&o%OPERATOR% &7によって &e%DURATION% &7Muteされました。'
+        - '&7理由 » &o%REASON%'
+
+    exempted: '&c&o%TARGET%&7 はMuteできません。'
+    usage: '&c使い方: /mute &e<プレイヤー> [時間] <理由>'
+    permission:
+      duration: '&c私のためにこれを行うことはできません%DURATION%。'
+      uuid: '&cプレイヤーに対してこれを行うことはできません。'
+      ip-address: '&cこれを IP アドレスに対して行うことはできません。'
+      both: 'cプレイヤーとその IP アドレスに対してこれを行うことはできません。'
+
+
+  kicks:
+    layout:
+      - '&c&lあなたはこのサーバーからKickされました。'
+      - ''
+      - '&c&l理由'
+      - '&7%REASON%'
+    success:
+      message: '&e%REASON%&a &7のため、&c&o%VICTIM%&7 をKickしました。'
+      notification: 
+        - '&c&o%VICTIM% &7は &e&o%OPERATOR% &7によってKickされました。'
+        - '&7理由 » &o%REASON%'
+
+    exempted: '&c&o%TARGET%&7 cannot be kicked.'
+    must-be-online: '&c&o%TARGET%&7 must be online.'
+    usage: '&cUsage: /kick &e<player> <reason>&c.'
+    permission:
+      uuid: '&cプレイヤーに対してこれを行うことはできません。'
+      ip-address: '&cこれを IP アドレスに対して行うことはできません。'
+      both: '&cプレイヤーとその IP アドレスに対してこれを行うことはできません。'
+
+
+  warns:
+    layout:
+      - '&8------------------------------------'
+      - '&c&lあなたは警告を運営より実行されました。'
+      - ''
+      - '&c内容 &8: &7%REASON%'
+      - '&a異議申し立てはDiscordで &8» &9&nhttps://discord.gg/n5UgCR3VKH'
+      - '&8------------------------------------'
+    success:
+      message: '&e%REASON%&a &7のため、&c&o%VICTIM%&7 を &e%DURATION% &7警告しました。'
+      notification:
+        - '&c&o%VICTIM% &7は &e&o%OPERATOR% &7によって &e%DURATION% &7警告されました。'
+        - '&7理由 » &o%REASON%'
+
+    exempted: '&c&o%TARGET%&7 は警告できません。'
+    usage: '&c使い方: /warn &e<プレイヤー> [時間] <理由>'
+    permission:
+      duration: '&c私のためにこれを行うことはできません%DURATION%。'
+      uuid: '&&cプレイヤーに対してこれを行うことはできません。'
+      ip-address: '&cこれを IP アドレスに対して行うことはできません。'
+      both: '&cプレイヤーとその IP アドレスに対してこれを行うことはできません。'
+
+
+  bans:
+    conflicting: '&c&o%TARGET%&7 はすでにBanされています。'
+    layout:
+      - '&c&lあなたはこのサーバーをBANされています。'
+      - '&7残り時間 &8: &e%TIME_REMAINING%'
+      - '&7'
+      - '&c&l理由'
+      - '&7%REASON%'
+      - ''
+      - '&a異議申し立てはDiscordで &8» &9&nhttps://discord.gg/n5UgCR3VKH'
+    success:
+      message: '&e%REASON%&a &7のため、&c&o%VICTIM%&7 を &e%DURATION% &7Banしました。'
+      notification:
+        - '&c&o%VICTIM% &7は &e&o%OPERATOR% &7によって &e%DURATION% &7Banされました。'
+        - '&7理由 » &o%REASON%'
+
+    exempted: '&c&o%TARGET%&7 は禁止できません。'
+    usage: '&c使い方: /ban &e<プレイヤー> [時間] <理由>'
+    permission:
+      duration: '&cあなたは私のためにこれを行うことはできません%DURATION%'
+      uuid: '&cプレイヤーに対してこれを行うことはできません。'
+      ip-address: '&cこれを IP アドレスに対して行うことはできません。'
+      both: '&cプレイヤーとその IP アドレスに対してこれを行うことはできません。'
+
+
+
+  # alts チェックと alts アカウント通知のメッセージ
+  #
+  # このセクションを設定する前に、アドレス強制を確認する必要があります。
+  # メインの config.yml の設定を確認し、さまざまな種類の alts 検出について理解します。
+  # 通常の検出と厳密な検出があります。
+alts:
+   # /altsコマンドについて
+  command:
+     # alts チェックの上に表示するメッセージ。 無効にするには空の文字列に設定します
+    header:
+      - '&c&o%TARGET%&7 のサブアカウントを検索中…'
+      - '&f[&aNot-Punished&f][&cBannd&f][&eMuted&f]'
+    permission: '&calts をチェックすることはできません。'
+    none-found: '&7代替アカウントが見つかりません'
+    usage: '&c使い方: /alts &e<プレーヤー>'
+
+  formatting:
+     # 厳密な検出によって検出された alts アカウントの説明。
+    strict: '&e単なる可能性'
+     # 通常の検出で検出された alts アカウントの説明。
+    normal: '&c可能性が高い'
+     # 検出された 1 つの alts をどのように表示するか
+     # 利用可能な変数:
+     # %DETECTION_KIND% - アカウントが検出された方法。 通常または厳密なオプションに置き換えられます。
+     # %ADDRESS% - 検出につながった問題のアドレス
+     # %RELEVANT_USER% - 名前表示オプションに従ってフォーマットされた他のアカウントのユーザー名
+     # %RELEVANT_USERID% - 他のアカウントの uuid
+     # %DATE_RECORDED% - 代替アカウントが記録された日付
+    layout:
+      - '&o%RELEVANT_USER% &7(%ADDRESS%)'
+     # alt-check レイアウトでは、alts のユーザー名は禁止されているかどうかに応じてフォーマットされる場合があります
+     # たとえば、禁止された alts のユーザー名は赤色で表示されますが、禁止されていない alts は緑色になります。
+     # 変数: %USERNAME%
+    name-display:
+      muted: '&e&o%USERNAME%'
+      banned: '&c&o%USERNAME%'
+      not-punished: '&a&o%USERNAME%'
+
+
+  auto-show:
+     # alts チェックの上に表示するメッセージ。 無効にするには空の文字列に設定します
+    header:
+      - '&c&o%TARGET%&7 のサブアカウントを検索中…'
+      - '&f[&aNot-Punished&f][&cBannd&f][&eMuted&f]'
+
+
+ # /accounthistory コマンドの設定
+account-history:
+   # /accounthistory delete <user> <timestamp> に関係します
+  delete:
+    permission: '&c記録されたアカウントを削除することはできません。'
+    success: '&7&e%TARGET% の記録されたアカウントが正常に削除されました'
+    no-such-account: '&c%TARGET% には、指定されたタイムスタンプの記録されたアカウントがありません。'
+    usage:
+      - '&c使い方: /accounthistory delete <ユーザー> <タイムスタンプ>.&f'
+      - '&7タイムスタンプは UNIX 秒単位で、通常は /accounthistory リストから取得されます。'
+
+   # /accounthistory list <ユーザー>
+  listing:
+     # アカウントのリストの前に表示するメッセージ。 無効にするには空の文字列に設定します
+    header: '&c&o%TARGET%&7 の既知のアカウント レポートは次のとおりです。'
+    permission: '&c記録されたアカウントをリストすることはできません。'
+    none-found: '&7記録されたアカウントが見つかりません'
+     # 単一の記録されたアカウントの表示方法
+     # 利用可能な変数:
+     # %TARGET% - コマンドへの元の入力
+     # %USERNAME% - プレーヤーが接続したユーザー名
+     # %ADDRESS% - プレーヤーが接続したアドレス
+     # %DATE_RECORDED% - 結合が記録された日付
+     # %DATE_RECORDED_RAW% - 結合が記録された生のタイムスタンプ
+    layout: '&e&o%USERNAME% &7(%ADDRESS%) &7は &e%DATE_RECORDED% &7(%DATE_RECORDED_RAW%) &7からサーバーへ接続しました。||ttp:&7クリックしてこの保存アカウントを削除||cmd:/accounthistory delete %TARGET% %DATE_RECORDED_RAW%'
+    usage: '&c使い方: /accounthistory list <ユーザー|IP>'
+
+  usage: '&c使い方: /accounthistory <delete|list>'
